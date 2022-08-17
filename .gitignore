@@ -1,3 +1,6 @@
+# Env file, which could include secret stuff like API keys
+.env
+
 # Logs
 logs
 *.log
