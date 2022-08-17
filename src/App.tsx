@@ -1,8 +1,10 @@
+import MapView from './components/MapView';
+
 const App = () => {
   return (
-    <div>
-      Edit <code>src/App.tsx</code> and save to test HMR.
-    </div>
+    <>
+      <MapView />
+    </>
   );
 };
 
