@@ -3,7 +3,10 @@ import MapView from './components/MapView';
 const App = () => {
   return (
     <>
-      <MapView />
+      <MapView
+        mapProps={{ basemap: 'arcgis-topographic' }}
+        mapViewProps={{ center: [-118.805, 34.027], zoom: 13 }}
+      />
     </>
   );
 };

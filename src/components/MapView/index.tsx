@@ -7,31 +7,36 @@ import '@arcgis/core/assets/esri/themes/light/main.css';
 
 esriConfig.apiKey = import.meta.env.VITE_ESRI_API_KEY;
 
+interface MapViewProps
+  extends DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement> {
+  mapProps: __esri.MapProperties;
+  mapViewProps: __esri.MapViewProperties;
+}
+
 const MapView = ({
+  mapProps,
+  mapViewProps,
   children,
-  className,
+  className = 'mapView',
   ...props
-}: DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement>) => {
+}: MapViewProps) => {
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (!containerRef.current) return;
 
-    const map = new Map({
-      basemap: 'arcgis-topographic',
-    });
+    const map = new Map(mapProps);
     const mapView = new View({
+      ...mapViewProps,
       map,
-      center: [-118.805, 34.027],
-      zoom: 13,
       container: containerRef.current,
     });
 
     return () => mapView.destroy();
-  }, []);
+  }, [mapProps, mapViewProps]);
 
   return (
-    <div ref={containerRef} className={className || 'mapView'} {...props}>
+    <div ref={containerRef} className={className} {...props}>
       {children}
     </div>
   );
