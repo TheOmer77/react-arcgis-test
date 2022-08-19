@@ -20,20 +20,36 @@ const MapView = ({
   className = 'mapView',
   ...props
 }: MapViewProps) => {
-  const containerRef = useRef<HTMLDivElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null),
+    mapRef = useRef<Map>(),
+    mapViewRef = useRef<View>();
 
   useEffect(() => {
     if (!containerRef.current) return;
 
-    const map = new Map(mapProps);
-    const mapView = new View({
-      ...mapViewProps,
-      map,
+    mapRef.current = new Map();
+    mapViewRef.current = new View({
+      map: mapRef.current,
       container: containerRef.current,
     });
 
-    return () => mapView.destroy();
-  }, [mapProps, mapViewProps]);
+    return () => mapViewRef.current?.destroy();
+  }, []);
+
+  useEffect(() => {
+    Object.keys(mapProps).forEach(key =>
+      mapRef.current?.set?.(key, mapProps[key as keyof __esri.MapProperties])
+    );
+  }, [mapProps]);
+
+  useEffect(() => {
+    Object.keys(mapViewProps).forEach(key =>
+      mapViewRef.current?.set?.(
+        key,
+        mapViewProps[key as keyof __esri.MapViewProperties]
+      )
+    );
+  }, [mapViewProps]);
 
   return (
     <div ref={containerRef} className={className} {...props}>
