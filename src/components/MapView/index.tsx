@@ -4,6 +4,7 @@ import View from '@arcgis/core/views/MapView';
 import esriConfig from '@arcgis/core/config';
 
 import '@arcgis/core/assets/esri/themes/light/main.css';
+import MapViewContext from '../../contexts/MapViewContext';
 
 esriConfig.apiKey = import.meta.env.VITE_ESRI_API_KEY;
 
@@ -52,9 +53,13 @@ const MapView = ({
   }, [mapViewProps]);
 
   return (
-    <div ref={containerRef} className={className} {...props}>
-      {children}
-    </div>
+    <MapViewContext.Provider
+      value={{ map: mapRef.current, mapView: mapViewRef.current }}
+    >
+      <div ref={containerRef} className={className} {...props}>
+        {children}
+      </div>
+    </MapViewContext.Provider>
   );
 };
 
