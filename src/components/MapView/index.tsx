@@ -1,4 +1,10 @@
-import { DetailedHTMLProps, HTMLAttributes, useEffect, useRef } from 'react';
+import {
+  DetailedHTMLProps,
+  HTMLAttributes,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
 import Map from '@arcgis/core/Map';
 import View from '@arcgis/core/views/MapView';
 import esriConfig from '@arcgis/core/config';
@@ -21,45 +27,43 @@ const MapView = ({
   className = 'mapView',
   ...props
 }: MapViewProps) => {
-  const containerRef = useRef<HTMLDivElement>(null),
-    mapRef = useRef<Map>(),
-    mapViewRef = useRef<View>();
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [map, setMap] = useState<Map>(),
+    [mapView, setMapView] = useState<View>();
 
   useEffect(() => {
     if (!containerRef.current) return;
 
-    mapRef.current = new Map();
-    mapViewRef.current = new View({
-      map: mapRef.current,
+    const newMap = new Map();
+    const newMapView = new View({
+      map: newMap,
       container: containerRef.current,
     });
 
-    return () => mapViewRef.current?.destroy();
+    setMap(newMap);
+    setMapView(newMapView);
+
+    return () => newMapView.destroy();
   }, []);
 
   useEffect(() => {
     Object.keys(mapProps).forEach(key =>
-      mapRef.current?.set?.(key, mapProps[key as keyof __esri.MapProperties])
+      map?.set?.(key, mapProps[key as keyof __esri.MapProperties])
     );
-  }, [mapProps]);
+  }, [map, mapProps]);
 
   useEffect(() => {
     Object.keys(mapViewProps).forEach(key =>
-      mapViewRef.current?.set?.(
-        key,
-        mapViewProps[key as keyof __esri.MapViewProperties]
-      )
+      mapView?.set?.(key, mapViewProps[key as keyof __esri.MapViewProperties])
     );
-  }, [mapViewProps]);
+  }, [mapView, mapViewProps]);
 
   return (
-    <MapViewContext.Provider
-      value={{ map: mapRef.current, mapView: mapViewRef.current }}
-    >
-      <div ref={containerRef} className={className} {...props}>
+    <div ref={containerRef} className={className} {...props}>
+      <MapViewContext.Provider value={{ map, mapView }}>
         {children}
-      </div>
-    </MapViewContext.Provider>
+      </MapViewContext.Provider>
+    </div>
   );
 };
 
