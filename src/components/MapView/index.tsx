@@ -27,6 +27,8 @@ const MapView = ({
   className = 'mapView',
   ...props
 }: MapViewProps) => {
+  const initialMapProps = useRef(mapProps),
+    initialMapViewProps = useRef(mapViewProps);
   const containerRef = useRef<HTMLDivElement>(null);
   const [map, setMap] = useState<Map>(),
     [mapView, setMapView] = useState<View>();
@@ -34,8 +36,9 @@ const MapView = ({
   useEffect(() => {
     if (!containerRef.current) return;
 
-    const newMap = new Map();
+    const newMap = new Map(initialMapProps.current);
     const newMapView = new View({
+      ...initialMapViewProps.current,
       map: newMap,
       container: containerRef.current,
     });
