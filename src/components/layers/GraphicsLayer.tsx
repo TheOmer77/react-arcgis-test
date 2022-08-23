@@ -10,10 +10,12 @@ import _GraphicsLayer from '@arcgis/core/layers/GraphicsLayer';
 import useMap from '../../hooks/useMap';
 
 interface GraphicsLayerProps extends __esri.GraphicsLayerProperties {
+  index?: number;
   children?: ReactNode;
 }
 
 const GraphicsLayer = ({
+  index,
   children: _children,
   ...props
 }: GraphicsLayerProps) => {
@@ -27,13 +29,13 @@ const GraphicsLayer = ({
 
   useEffect(() => {
     const layer = new _GraphicsLayer();
-    map?.add(layer);
+    map?.add(layer, index);
     setLayer(layer);
 
     return () => {
       map?.remove(layer);
     };
-  }, [map]);
+  }, [index, map]);
 
   useEffect(() => {
     Object.keys(props).forEach(key =>
