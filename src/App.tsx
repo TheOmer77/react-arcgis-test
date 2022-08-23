@@ -1,6 +1,21 @@
+import FeatureLayer from './components/layers/FeatureLayer';
 import Graphic from './components/Graphic';
 import GraphicsLayer from './components/layers/GraphicsLayer';
 import MapView from './components/views/MapView';
+
+const FeatureLayerExample = () => (
+  <>
+    <FeatureLayer url='https://services3.arcgis.com/GVgbJbqm8hXASVYi/arcgis/rest/services/Trailheads/FeatureServer/0' />
+    <FeatureLayer
+      url='https://services3.arcgis.com/GVgbJbqm8hXASVYi/arcgis/rest/services/Trails/FeatureServer/0'
+      index={0}
+    />
+    <FeatureLayer
+      url='https://services3.arcgis.com/GVgbJbqm8hXASVYi/arcgis/rest/services/Parks_and_Open_Space/FeatureServer/0'
+      index={0}
+    />
+  </>
+);
 
 const GraphicLayerExample = () => (
   <GraphicsLayer>
@@ -67,6 +82,7 @@ const App = () => {
         mapProps={{ basemap: 'arcgis-topographic' }}
         mapViewProps={{ center: [-118.805, 34.027], zoom: 13 }}
       >
+        <FeatureLayerExample />
         <GraphicLayerExample />
       </MapView>
     </>
