@@ -3,6 +3,7 @@ import {
   isValidElement,
   ReactNode,
   useEffect,
+  useRef,
   useState,
 } from 'react';
 import _GraphicsLayer from '@arcgis/core/layers/GraphicsLayer';
@@ -19,7 +20,7 @@ const GraphicsLayer = ({
   children: _children,
   ...props
 }: GraphicsLayerProps) => {
-  // const ref = useRef<_GraphicsLayer>();
+  const initialProps = useRef(props);
   const [layer, setLayer] = useState<_GraphicsLayer>();
   const { map } = useMap();
 
@@ -28,7 +29,7 @@ const GraphicsLayer = ({
     : [_children];
 
   useEffect(() => {
-    const layer = new _GraphicsLayer();
+    const layer = new _GraphicsLayer(initialProps.current);
     map?.add(layer, index);
     setLayer(layer);
 
