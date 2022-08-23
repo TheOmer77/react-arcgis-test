@@ -1,6 +1,6 @@
 import Graphic from './components/Graphic';
 import GraphicsLayer from './components/layers/GraphicsLayer';
-import MapView from './components/MapView';
+import MapView from './components/views/MapView';
 
 const App = () => {
   return (
